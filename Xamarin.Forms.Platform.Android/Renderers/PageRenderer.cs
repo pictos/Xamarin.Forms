@@ -95,6 +95,8 @@ namespace Xamarin.Forms.Platform.Android
 				UpdateBackground(false);
 			else if (e.PropertyName == VisualElement.HeightProperty.PropertyName)
 				UpdateHeight();
+			else if (e.PropertyName == NavigationPage.BackgroundTitleViewProperty.PropertyName)
+				Element?.FireUpdateBackgroundTitleViewEvent();
 		}
 
 		void UpdateHeight()
@@ -187,7 +189,7 @@ namespace Xamarin.Forms.Platform.Android
 				var tabGroup = tabIndexes[idx];
 				foreach (var child in tabGroup)
 				{
-					if (child is Layout || 
+					if (child is Layout ||
 						!(
 							child is VisualElement ve && ve.IsTabStop
 							&& AutomationProperties.GetIsInAccessibleTree(ve) != false // accessible == true

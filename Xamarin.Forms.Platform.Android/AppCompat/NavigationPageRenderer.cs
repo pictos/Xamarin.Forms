@@ -109,16 +109,25 @@ namespace Xamarin.Forms.Platform.Android.AppCompat
 					return;
 
 				if (_current != null)
+				{
 					_current.PropertyChanged -= CurrentOnPropertyChanged;
+					_current.UpdateBackgroundTitleView -= UpdateBackgroundTitleView;
+				}
 
 				_current = value;
 
 				if (_current != null)
 				{
 					_current.PropertyChanged += CurrentOnPropertyChanged;
+					_current.UpdateBackgroundTitleView += UpdateBackgroundTitleView;
 					ToolbarVisible = NavigationPage.GetHasNavigationBar(_current);
 				}
 			}
+		}
+
+		private void UpdateBackgroundTitleView(object sender, EventArgs e)
+		{
+			UpdateToolbar();
 		}
 
 		FragmentManager FragmentManager => _fragmentManager ?? (_fragmentManager = Context.GetFragmentManager());
@@ -171,7 +180,7 @@ namespace Xamarin.Forms.Platform.Android.AppCompat
 			if (disposing)
 			{
 				Device.Info.PropertyChanged -= DeviceInfoPropertyChanged;
-			
+
 				if (NavigationPageController != null)
 				{
 					var navController = NavigationPageController;
@@ -198,7 +207,7 @@ namespace Xamarin.Forms.Platform.Android.AppCompat
 					trans.CommitAllowingStateLossEx();
 					fm.ExecutePendingTransactionsEx();
 				}
-				
+
 				_toolbar.RemoveView(_titleView);
 				_titleView?.Dispose();
 				_titleView = null;
@@ -233,7 +242,7 @@ namespace Xamarin.Forms.Platform.Android.AppCompat
 					_toolbar.Menu.Clear();
 
 					RemoveView(_toolbar);
-				
+
 					_toolbar.Dispose();
 					_toolbar = null;
 				}
@@ -925,7 +934,7 @@ namespace Xamarin.Forms.Platform.Android.AppCompat
 				{
 					IMenuItem menuItem = menu.Add(item.Text);
 					menuItem.SetEnabled(controller.IsEnabled);
-					menuItem.SetOnMenuItemClickListener(new GenericMenuClickListener(controller.Activate));					
+					menuItem.SetOnMenuItemClickListener(new GenericMenuClickListener(controller.Activate));
 					menuItem.SetTitleOrContentDescription(item);
 				}
 				else
@@ -1005,7 +1014,31 @@ namespace Xamarin.Forms.Platform.Android.AppCompat
 				}
 			}
 
-			Color tintColor = Element.BarBackgroundColor;
+			Color textColor = Element.BarTextColor;
+			if (!textColor.IsDefault)
+				bar.SetTitleTextColor(textColor.ToAndroid().ToArgb());
+
+			bar.Title = currentPage?.Title ?? string.Empty;
+
+			if (_toolbar.NavigationIcon != null && !textColor.IsDefault)
+			{
+				var icon = _toolbar.NavigationIcon as DrawerArrowDrawable;
+				if (icon != null)
+					icon.Color = textColor.ToAndroid().ToArgb();
+			}
+
+			UpdateTitleIcon();
+
+			UpdateTitleView();
+			UpdateBarColor(bar);
+
+		}
+
+		 void UpdateBarColor(AToolbar bar)
+		{
+			Color tintColor = NavigationPage.GetBackgroundTitleView(Element.CurrentPage);
+			if (tintColor.IsDefault)
+				tintColor = Element.BarBackgroundColor;
 
 			if (Forms.IsLollipopOrNewer)
 			{
@@ -1028,23 +1061,6 @@ namespace Xamarin.Forms.Platform.Android.AppCompat
 					bar.SetBackgroundColor(tintColor.ToAndroid());
 				}
 			}
-
-			Color textColor = Element.BarTextColor;
-			if (!textColor.IsDefault)
-				bar.SetTitleTextColor(textColor.ToAndroid().ToArgb());
-
-			bar.Title = currentPage?.Title ?? string.Empty;
-
-			if (_toolbar.NavigationIcon != null && !textColor.IsDefault)
-			{
-				var icon = _toolbar.NavigationIcon as DrawerArrowDrawable;
-				if (icon != null)
-					icon.Color = textColor.ToAndroid().ToArgb();
-			}
-
-			UpdateTitleIcon();
-
-			UpdateTitleView();
 		}
 
 		void UpdateTitleIcon()
