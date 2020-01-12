@@ -46,7 +46,27 @@ namespace Xamarin.Forms.Platform.iOS
 			});
 		}
 
-		Page Current { get; set; }
+		Page _current;
+		Page Current 
+		{
+			get => _current;
+			set 
+			{
+				if (_current == value)
+					return;
+				
+				if (_current != null)
+					_current.UpdateBackgroundTitleView -= CurrentPage_UpdateBackgroundTitleView;
+
+				_current = value;
+
+				if(_current != null)
+				{
+					_current.UpdateBackgroundTitleView += CurrentPage_UpdateBackgroundTitleView;
+					UpdateBarBackgroundColor();
+				}
+			}
+		}
 
 		IPageController PageController => Element as IPageController;
 
@@ -226,6 +246,7 @@ namespace Xamarin.Forms.Platform.iOS
 			navPage.PopToRootRequested += OnPopToRootRequested;
 			navPage.RemovePageRequested += OnRemovedPageRequested;
 			navPage.InsertPageBeforeRequested += OnInsertPageBeforeRequested;
+			//NavPage.CurrentPage.UpdateBackgroundTitleView += CurrentPage_UpdateBackgroundTitleView;
 
 			UpdateTint();
 			UpdateBarBackgroundColor();
@@ -245,6 +266,11 @@ namespace Xamarin.Forms.Platform.iOS
 			UpdateToolBarVisible();
 			UpdateBackgroundColor();
 			Current = navPage.CurrentPage;
+		}
+
+		void CurrentPage_UpdateBackgroundTitleView(object sender, EventArgs e)
+		{
+			UpdateBarBackgroundColor();
 		}
 
 		protected override void Dispose(bool disposing)
@@ -622,7 +648,11 @@ namespace Xamarin.Forms.Platform.iOS
 
 		void UpdateBarBackgroundColor()
 		{
-			var barBackgroundColor = NavPage.BarBackgroundColor;
+			Color barBackgroundColor = Color.Default;
+			if(Current != null)
+				barBackgroundColor = NavigationPage.GetBackgroundTitleView(Current);
+			if(barBackgroundColor == Color.Default)
+				barBackgroundColor = NavPage.BarBackgroundColor;
 			// Set navigation bar background color
 			NavigationBar.BarTintColor = barBackgroundColor == Color.Default
 				? UINavigationBar.Appearance.BarTintColor

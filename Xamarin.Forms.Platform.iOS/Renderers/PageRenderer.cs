@@ -338,6 +338,8 @@ namespace Xamarin.Forms.Platform.iOS
 				if (ShouldUseSafeArea() && Page.Padding != SafeAreaInsets)
 					_userOverriddenSafeArea = true;
 			}
+			else if (e.PropertyName == NavigationPage.BackgroundTitleViewProperty.PropertyName)
+				Page.FireUpdateBackgroundTitleViewEvent();
 		}
 
 		public override UIKit.UIStatusBarAnimation PreferredStatusBarUpdateAnimation
