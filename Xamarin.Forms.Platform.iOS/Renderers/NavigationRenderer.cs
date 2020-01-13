@@ -56,13 +56,13 @@ namespace Xamarin.Forms.Platform.iOS
 					return;
 				
 				if (_current != null)
-					_current.UpdateBackgroundTitleView -= CurrentPage_UpdateBackgroundTitleView;
+					_current.UpdateBackgroundTitleView -= OnUpdateBackgroundTitleView;
 
 				_current = value;
 
 				if(_current != null)
 				{
-					_current.UpdateBackgroundTitleView += CurrentPage_UpdateBackgroundTitleView;
+					_current.UpdateBackgroundTitleView += OnUpdateBackgroundTitleView;
 					UpdateBarBackgroundColor();
 				}
 			}
@@ -268,10 +268,8 @@ namespace Xamarin.Forms.Platform.iOS
 			Current = navPage.CurrentPage;
 		}
 
-		void CurrentPage_UpdateBackgroundTitleView(object sender, EventArgs e)
-		{
+		void OnUpdateBackgroundTitleView(object sender, EventArgs e) => 
 			UpdateBarBackgroundColor();
-		}
 
 		protected override void Dispose(bool disposing)
 		{

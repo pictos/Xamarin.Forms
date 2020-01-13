@@ -469,7 +469,7 @@ namespace Xamarin.Forms.Platform.UWP
 
 				_container.Content = null;
 				_currentPage.PropertyChanged -= OnCurrentPagePropertyChanged;
-				_currentPage.UpdateBackgroundTitleView -= _currentPage_UpdateBackgroundTitleView;
+				_currentPage.UpdateBackgroundTitleView -= OnUpdateBackgroundTitleView;
 			}
 
 			if (!isPopping)
@@ -484,7 +484,7 @@ namespace Xamarin.Forms.Platform.UWP
 			UpdateBackButtonTitle();
 
 			page.PropertyChanged += OnCurrentPagePropertyChanged;
-			page.UpdateBackgroundTitleView += _currentPage_UpdateBackgroundTitleView;
+			page.UpdateBackgroundTitleView += OnUpdateBackgroundTitleView;
 
 			IVisualElementRenderer renderer = page.GetOrCreateRenderer();
 
@@ -509,10 +509,8 @@ namespace Xamarin.Forms.Platform.UWP
 			_container.DataContext = page;
 		}
 
-		void _currentPage_UpdateBackgroundTitleView(object sender, EventArgs e)
-		{
+		void OnUpdateBackgroundTitleView(object sender, EventArgs e) => 
 			UpdateNavigationBarBackground();
-		}
 
 		void UpdateBackButtonTitle()
 		{

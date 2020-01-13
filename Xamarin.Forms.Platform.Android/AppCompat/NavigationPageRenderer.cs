@@ -111,7 +111,7 @@ namespace Xamarin.Forms.Platform.Android.AppCompat
 				if (_current != null)
 				{
 					_current.PropertyChanged -= CurrentOnPropertyChanged;
-					_current.UpdateBackgroundTitleView -= UpdateBackgroundTitleView;
+					_current.UpdateBackgroundTitleView -= OnUpdateBackgroundTitleView;
 				}
 
 				_current = value;
@@ -119,16 +119,14 @@ namespace Xamarin.Forms.Platform.Android.AppCompat
 				if (_current != null)
 				{
 					_current.PropertyChanged += CurrentOnPropertyChanged;
-					_current.UpdateBackgroundTitleView += UpdateBackgroundTitleView;
+					_current.UpdateBackgroundTitleView += OnUpdateBackgroundTitleView;
 					ToolbarVisible = NavigationPage.GetHasNavigationBar(_current);
 				}
 			}
 		}
 
-		private void UpdateBackgroundTitleView(object sender, EventArgs e)
-		{
+		void OnUpdateBackgroundTitleView(object sender, EventArgs e) => 
 			UpdateToolbar();
-		}
 
 		FragmentManager FragmentManager => _fragmentManager ?? (_fragmentManager = Context.GetFragmentManager());
 
