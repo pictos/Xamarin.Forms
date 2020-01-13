@@ -20,7 +20,7 @@ using Windows.UI.Xaml.Data;
 
 namespace Xamarin.Forms.Platform.UWP
 {
-	public class NavigationPageRenderer : IVisualElementRenderer, ITitleProvider, ITitleIconProvider, 
+	public class NavigationPageRenderer : IVisualElementRenderer, ITitleProvider, ITitleIconProvider,
 		ITitleViewProvider, IToolbarProvider, IToolBarForegroundBinder
 	{
 		PageControl _container;
@@ -204,7 +204,7 @@ namespace Xamarin.Forms.Platform.UWP
 				UpdatePadding();
 				LookupRelevantParents();
 				UpdateTitleColor();
-				UpdateNavigationBarBackground();
+				//UpdateNavigationBarBackground();
 				UpdateToolbarPlacement();
 				UpdateToolbarDynamicOverflowEnabled();
 				UpdateTitleIcon();
@@ -273,11 +273,19 @@ namespace Xamarin.Forms.Platform.UWP
 
 		Brush GetBarBackgroundBrush()
 		{
-			object defaultColor = GetDefaultColor();
-
-			if (Element.BarBackgroundColor.IsDefault && defaultColor != null)
-				return (Brush)defaultColor;
-			return Element.BarBackgroundColor.ToBrush();
+			Color barBackgroundColor = Color.Default;
+			if (_currentPage != null)
+				barBackgroundColor = NavigationPage.GetBackgroundTitleView(_currentPage);
+			
+			barBackgroundColor = (barBackgroundColor.IsDefault) ? Element.BarBackgroundColor : barBackgroundColor;
+			
+			if (barBackgroundColor.IsDefault)
+			{
+					object defaultColor = GetDefaultColor();
+					if (defaultColor != null)
+						return (Brush)defaultColor;
+			}
+			return barBackgroundColor.ToBrush();
 		}
 
 		Brush GetBarForegroundBrush()
@@ -452,11 +460,14 @@ namespace Xamarin.Forms.Platform.UWP
 		{
 			if (_currentPage != null)
 			{
+				if (_currentPage == page)
+					return;
 				if (isPopping)
 					_currentPage.Cleanup();
 
 				_container.Content = null;
 				_currentPage.PropertyChanged -= OnCurrentPagePropertyChanged;
+				_currentPage.UpdateBackgroundTitleView -= _currentPage_UpdateBackgroundTitleView;
 			}
 
 			if (!isPopping)
@@ -471,12 +482,15 @@ namespace Xamarin.Forms.Platform.UWP
 			UpdateBackButtonTitle();
 
 			page.PropertyChanged += OnCurrentPagePropertyChanged;
+			page.UpdateBackgroundTitleView += _currentPage_UpdateBackgroundTitleView;
 
 			IVisualElementRenderer renderer = page.GetOrCreateRenderer();
 
 			UpdateTitleVisible();
 			UpdateTitleOnParents();
 			UpdateTitleView();
+
+			UpdateNavigationBarBackground();
 
 			if (isAnimated && _transition == null)
 			{
@@ -491,6 +505,11 @@ namespace Xamarin.Forms.Platform.UWP
 
 			_container.Content = renderer.ContainerElement;
 			_container.DataContext = page;
+		}
+
+		void _currentPage_UpdateBackgroundTitleView(object sender, EventArgs e)
+		{
+			UpdateNavigationBarBackground();
 		}
 
 		void UpdateBackButtonTitle()
@@ -612,7 +631,7 @@ namespace Xamarin.Forms.Platform.UWP
 
 			_container.ToolbarDynamicOverflowEnabled = Element.OnThisPlatform().GetToolbarDynamicOverflowEnabled();
 		}
-		
+
 
 		void UpdateShowTitle()
 		{

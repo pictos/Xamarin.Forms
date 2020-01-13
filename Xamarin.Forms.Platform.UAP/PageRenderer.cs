@@ -1,4 +1,5 @@
 ﻿using System.Collections.ObjectModel;
+using System.ComponentModel;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Automation.Peers;
 
@@ -59,6 +60,14 @@ namespace Xamarin.Forms.Platform.UWP
 				if (_loaded)
 					e.NewElement.SendAppearing();
 			}
+		}
+
+		protected override void OnElementPropertyChanged(object sender, PropertyChangedEventArgs e)
+		{
+			base.OnElementPropertyChanged(sender, e);
+
+			if (e.PropertyName == NavigationPage.BackgroundTitleViewProperty.PropertyName)
+				Element.FireUpdateBackgroundTitleViewEvent();
 		}
 
 		void OnLoaded(object sender, RoutedEventArgs args)
