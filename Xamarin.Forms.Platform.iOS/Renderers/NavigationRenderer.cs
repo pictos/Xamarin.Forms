@@ -651,10 +651,10 @@ namespace Xamarin.Forms.Platform.iOS
 			Color barBackgroundColor = Color.Default;
 			if(Current != null)
 				barBackgroundColor = NavigationPage.GetBackgroundTitleView(Current);
-			if(barBackgroundColor == Color.Default)
+			if(barBackgroundColor.IsDefault)
 				barBackgroundColor = NavPage.BarBackgroundColor;
 			// Set navigation bar background color
-			NavigationBar.BarTintColor = barBackgroundColor == Color.Default
+			NavigationBar.BarTintColor = barBackgroundColor.IsDefault
 				? UINavigationBar.Appearance.BarTintColor
 				: barBackgroundColor.ToUIColor();
 		}

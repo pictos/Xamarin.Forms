@@ -277,7 +277,9 @@ namespace Xamarin.Forms.Platform.UWP
 			if (_currentPage != null)
 				barBackgroundColor = NavigationPage.GetBackgroundTitleView(_currentPage);
 			
-			barBackgroundColor = (barBackgroundColor.IsDefault) ? Element.BarBackgroundColor : barBackgroundColor;
+			barBackgroundColor = (barBackgroundColor.IsDefault) 
+				? Element.BarBackgroundColor 
+				: barBackgroundColor;
 			
 			if (barBackgroundColor.IsDefault)
 			{

@@ -1034,9 +1034,12 @@ namespace Xamarin.Forms.Platform.Android.AppCompat
 
 		}
 
-		 void UpdateBarColor(AToolbar bar)
+		void UpdateBarColor(AToolbar bar)
 		{
-			Color tintColor = NavigationPage.GetBackgroundTitleView(Element.CurrentPage);
+			Color tintColor = Color.Default;
+			if (_current != null)
+				tintColor = NavigationPage.GetBackgroundTitleView(_current);
+			
 			if (tintColor.IsDefault)
 				tintColor = Element.BarBackgroundColor;
 
