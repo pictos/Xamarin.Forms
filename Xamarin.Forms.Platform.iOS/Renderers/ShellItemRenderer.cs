@@ -249,7 +249,7 @@ namespace Xamarin.Forms.Platform.iOS
 
 		void CreateTabRenderers()
 		{
-			if(ShellItem.CurrentItem == null)
+			if (ShellItem.CurrentItem == null)
 				throw new InvalidOperationException($"Content not found for active {ShellItem}. Title: {ShellItem.Title}. Route: {ShellItem.Route}.");
 
 			var items = ShellItemController.GetItems();
@@ -283,13 +283,14 @@ namespace Xamarin.Forms.Platform.iOS
 			for (i = 0; i < ViewControllers.Length; i++)
 			{
 				var renderer = RendererForViewController(ViewControllers[i]);
-				if (!renderer.ShellSection.IsEnabled)
+				var currentItemIsNotEnabled = !renderer.ShellSection.CurrentItem.IsEnabled;
+				if (!renderer.ShellSection.IsEnabled || currentItemIsNotEnabled)
 				{
 					TabBar.Items[i].Enabled = false;
 				}
 			}
 		}
-			   
+
 		void GoTo(ShellSection shellSection)
 		{
 			if (shellSection == null || _currentSection == shellSection)
