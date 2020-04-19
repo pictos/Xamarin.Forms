@@ -6,6 +6,7 @@ using Google.Android.Material.BottomNavigation;
 using Google.Android.Material.BottomSheet;
 #else
 using Android.Support.Design.Widget;
+using Android.Support.Design.BottomNavigation;
 #endif
 using Android.Views;
 using Android.Widget;
@@ -22,6 +23,7 @@ using LP = Android.Views.ViewGroup.LayoutParams;
 using Orientation = Android.Widget.Orientation;
 using Typeface = Android.Graphics.Typeface;
 using TypefaceStyle = Android.Graphics.TypefaceStyle;
+using System.Linq;
 
 namespace Xamarin.Forms.Platform.Android
 {
@@ -84,7 +86,12 @@ namespace Xamarin.Forms.Platform.Android
 			_appearanceTracker = ShellContext.CreateBottomNavViewAppearanceTracker(ShellItem);
 			_bottomNavigationTracker = new BottomNavigationViewTracker();
 			((IShellController)ShellContext.Shell).AddAppearanceObserver(this, ShellItem);
+			var p = ShellItem.Items;
 
+			if (!p.Any(x => string.IsNullOrEmpty(x.Title)))
+				_bottomView.LabelVisibilityMode = LabelVisibilityMode.LabelVisibilityUnlabeled;
+			else
+				_bottomView.LabelVisibilityMode = LabelVisibilityMode.LabelVisibilityAuto;
 			return _outerLayout;
 		}
 

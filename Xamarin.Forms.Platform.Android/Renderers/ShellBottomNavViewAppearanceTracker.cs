@@ -5,6 +5,7 @@ using AndroidX.Core.Widget;
 using Google.Android.Material.BottomNavigation;
 #else
 using Android.Support.Design.Internal;
+using Android.Support.Design.BottomNavigation;
 using Android.Support.Design.Widget;
 using Android.Support.V4.Widget;
 #endif
@@ -73,7 +74,6 @@ namespace Xamarin.Forms.Platform.Android
 			var colorChangeRevealDrawable = oldBackground as ColorChangeRevealDrawable;
 			AColor lastColor = colorChangeRevealDrawable?.EndColor ?? colorDrawable?.Color ?? Color.Default.ToAndroid();
 			AColor newColor;
-
 			if (color == Color.Default)
 				newColor = Color.White.ToAndroid();
 			else
