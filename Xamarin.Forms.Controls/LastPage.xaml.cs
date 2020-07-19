@@ -20,7 +20,7 @@ namespace RemovePageReproduction.Views
             {
                 if (page != null)
                 {
-                    Shell.Current.Navigation.RemovePage(page);
+                    Shell.Current.RemovePageAsync("middlepage");
                 }
             }
         }

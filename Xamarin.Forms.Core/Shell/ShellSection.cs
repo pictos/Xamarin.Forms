@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Xamarin.Forms.Internals;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using System.Diagnostics;
 
 namespace Xamarin.Forms
 {
@@ -762,12 +763,18 @@ namespace Xamarin.Forms
 
 		protected virtual void OnRemovePage(Page page)
 		{
-			if (!_navStack.Contains(page))
-				return;
+			//if (!_navStack.Contains(page))
+			//	return;
 
 			bool currentPage = (((IShellSectionController)this).PresentedPage) == page;
 			var stack = _navStack.ToList();
-			stack.Remove(page);
+			var removed = stack.Remove(page);
+
+			if (!removed)
+			{
+				Debug.WriteLine("Deu ruim");
+			}
+
 			var allow = (!currentPage) ? true : 
 				((IShellController)Shell).ProposeNavigation(
 					ShellNavigationSource.Remove,
