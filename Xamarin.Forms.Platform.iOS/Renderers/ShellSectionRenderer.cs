@@ -398,6 +398,12 @@ namespace Xamarin.Forms.Platform.iOS
 
 			if (viewController != null)
 			{
+				//if (viewController == TopViewController)
+				//{
+				//	e.Animated = false;
+				//	OnPopRequested(e);
+				//}
+
 				ViewControllers = ViewControllers.Remove(viewController);
 
 				DisposePage(page);
