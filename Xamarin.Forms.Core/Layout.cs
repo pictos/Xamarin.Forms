@@ -136,6 +136,7 @@ namespace Xamarin.Forms
 
 		public static void LayoutChildIntoBoundingRegion(VisualElement child, Rectangle region)
 		{
+			Performance.Start(out string reference);
 			var parent = child.Parent as IFlowDirectionController;
 			bool isRightToLeft = false;
 			if (parent != null && (isRightToLeft = parent.ApplyEffectiveFlowDirectionToChildContainer && parent.EffectiveFlowDirection.IsRightToLeft()))
@@ -176,6 +177,7 @@ namespace Xamarin.Forms
 			region.Height -= margin.VerticalThickness;
 
 			child.Layout(region);
+			Performance.Stop(reference);
 		}
 
 		public void LowerChild(View view)
@@ -208,9 +210,11 @@ namespace Xamarin.Forms
 
 		protected void OnChildMeasureInvalidated(object sender, EventArgs e)
 		{
+			Performance.Start(out var reference);
 			InvalidationTrigger trigger = (e as InvalidationEventArgs)?.Trigger ?? InvalidationTrigger.Undefined;
 			OnChildMeasureInvalidated((VisualElement)sender, trigger);
 			OnChildMeasureInvalidated();
+			Performance.Stop(reference);
 		}
 
 		protected virtual void OnChildMeasureInvalidated()

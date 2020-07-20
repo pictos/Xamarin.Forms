@@ -850,7 +850,6 @@ namespace Xamarin.Forms
 			{
 				return new SizeRequest(new Size(-1, -1));
 			}
-
 			return Device.PlatformServices.GetNativeSize(this, widthConstraint, heightConstraint);
 		}
 
@@ -887,8 +886,10 @@ namespace Xamarin.Forms
 		}
 		internal virtual void InvalidateMeasureInternal(InvalidationTrigger trigger)
 		{
+			Performance.Start(out var reference);
 			_measureCache.Clear();
 			MeasureInvalidated?.Invoke(this, new InvalidationEventArgs(trigger));
+			Performance.Stop(reference);
 		}
 
 		void IVisualElementController.InvalidateMeasure(InvalidationTrigger trigger)

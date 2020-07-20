@@ -45,6 +45,8 @@ namespace Xamarin.Forms
 				return;
 			}
 
+			Performance.Start(out var reference);
+
 			LayoutInformation layoutInformationCopy = _layoutInformation;
 			if (width == layoutInformationCopy.Constraint.Width && height == layoutInformationCopy.Constraint.Height)
 			{
@@ -64,6 +66,8 @@ namespace Xamarin.Forms
 				if (child.IsVisible && layoutInformationCopy.Plots != null)
 						LayoutChildIntoBoundingRegion(child, layoutInformationCopy.Plots[i], layoutInformationCopy.Requests[i]);
 			}
+
+			Performance.Stop(reference);
 		}
 
 		[Obsolete("OnSizeRequest is obsolete as of version 2.2.0. Please use OnMeasure instead.")]

@@ -252,6 +252,7 @@ namespace Xamarin.Forms
 
 		protected virtual void LayoutChildren(double x, double y, double width, double height)
 		{
+			Performance.Start(out var reference);
 			var area = new Rectangle(x, y, width, height);
 			Rectangle originalArea = area;
 			if (_containerAreaSet)
@@ -277,6 +278,8 @@ namespace Xamarin.Forms
 				else
 					Forms.Layout.LayoutChildIntoBoundingRegion(child, area);
 			}
+
+			Performance.Stop(reference);
 		}
 
 		protected virtual void OnAppearing()
@@ -315,8 +318,10 @@ namespace Xamarin.Forms
 
 		protected virtual void OnChildMeasureInvalidated(object sender, EventArgs e)
 		{
+			Performance.Start(out var reference);
 			InvalidationTrigger trigger = (e as InvalidationEventArgs)?.Trigger ?? InvalidationTrigger.Undefined;
 			OnChildMeasureInvalidated((VisualElement)sender, trigger);
+			Performance.Stop(reference);
 		}
 
 		protected virtual void OnDisappearing()
@@ -342,6 +347,7 @@ namespace Xamarin.Forms
 			if (!ShouldLayoutChildren())
 				return;
 
+			Performance.Start(out var reference);
 			var startingLayout = new List<Rectangle>(LogicalChildren.Count);
 			foreach (Element el in LogicalChildren)
 			{
@@ -368,6 +374,8 @@ namespace Xamarin.Forms
 					}
 				}
 			}
+
+			Performance.Stop(reference);
 		}
 
 		internal virtual void OnChildMeasureInvalidated(VisualElement child, InvalidationTrigger trigger)
