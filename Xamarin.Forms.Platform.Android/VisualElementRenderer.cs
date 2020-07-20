@@ -139,9 +139,9 @@ namespace Xamarin.Forms.Platform.Android
 
 		public void UpdateLayout()
 		{
-			Performance.Start(out string reference);
+			//Performance.Start(out string reference);
 			Tracker?.UpdateLayout();
-			Performance.Stop(reference);
+			//Performance.Stop(reference);
 		}
 
 		protected int TabIndex { get; set; } = 0;
@@ -217,7 +217,7 @@ namespace Xamarin.Forms.Platform.Android
 			TElement oldElement = Element;
 			Element = element ?? throw new ArgumentNullException(nameof(element));
 
-			Performance.Start(out string reference);
+			//Performance.Start(out string reference);
 
 			if (oldElement != null)
 			{
@@ -268,7 +268,7 @@ namespace Xamarin.Forms.Platform.Android
 			UpdateTabStop();
 			UpdateTabIndex();
 
-			Performance.Stop(reference);
+			//Performance.Stop(reference);
 		}
 
 		/// <summary>

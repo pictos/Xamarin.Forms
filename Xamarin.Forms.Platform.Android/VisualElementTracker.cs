@@ -83,7 +83,7 @@ namespace Xamarin.Forms.Platform.Android
 
 		public void UpdateLayout()
 		{
-			Performance.Start(out string reference);
+			//Performance.Start(out string reference);
 
 			VisualElement view = _renderer.Element;
 			AView aview = _renderer.View;
@@ -97,19 +97,19 @@ namespace Xamarin.Forms.Platform.Android
 			var formsViewGroup = aview as FormsViewGroup;
 			if (formsViewGroup == null)
 			{
-				Performance.Start(reference, "Measure");
+				//Performance.Start(reference, "Measure");
 				aview.Measure(MeasureSpecFactory.MakeMeasureSpec(width, MeasureSpecMode.Exactly), MeasureSpecFactory.MakeMeasureSpec(height, MeasureSpecMode.Exactly));
-				Performance.Stop(reference, "Measure");
+				//Performance.Stop(reference, "Measure");
 
-				Performance.Start(reference, "Layout");
+				//Performance.Start(reference, "Layout");
 				aview.Layout(x, y, x + width, y + height);
-				Performance.Stop(reference, "Layout");
+				//Performance.Stop(reference, "Layout");
 			}
 			else
 			{
-				Performance.Start(reference, "MeasureAndLayout");
+				//Performance.Start(reference, "MeasureAndLayout");
 				formsViewGroup.MeasureAndLayout(MeasureSpecFactory.MakeMeasureSpec(width, MeasureSpecMode.Exactly), MeasureSpecFactory.MakeMeasureSpec(height, MeasureSpecMode.Exactly), x, y, x + width, y + height);
-				Performance.Stop(reference, "MeasureAndLayout");
+				//Performance.Stop(reference, "MeasureAndLayout");
 			}
 
 			// If we're running sufficiently new Android, we have to make sure to update the ClipBounds to
@@ -121,7 +121,7 @@ namespace Xamarin.Forms.Platform.Android
 
 			UpdateClip();
 
-			Performance.Stop(reference);
+			//Performance.Stop(reference);
 
 			//On Width or Height changes, the anchors needs to be updated
 			UpdateAnchorX();
@@ -313,7 +313,7 @@ namespace Xamarin.Forms.Platform.Android
 
 		void UpdateNativeView(object sender, EventArgs e)
 		{
-			Performance.Start(out string reference);
+			//Performance.Start(out string reference);
 
 			VisualElement view = _renderer.Element;
 			AView aview = _renderer.View;
@@ -350,19 +350,19 @@ namespace Xamarin.Forms.Platform.Android
 												   _context.ToPixels(view.TranslationY));
 			}
 
-			Performance.Stop(reference);
+			//Performance.Stop(reference);
 		}
 
 		void UpdateOpacity()
 		{
-			Performance.Start(out string reference);
+			//Performance.Start(out string reference);
 
 			VisualElement view = _renderer.Element;
 			AView aview = _renderer.View;
 
 			aview.Alpha = (float)view.Opacity;
 
-			Performance.Stop(reference);
+			//Performance.Stop(reference);
 		}
 
 		void UpdateRotation()

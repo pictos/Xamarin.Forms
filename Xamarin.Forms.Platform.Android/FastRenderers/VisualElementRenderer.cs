@@ -86,7 +86,7 @@ namespace Xamarin.Forms.Platform.Android.FastRenderers
 
 		void OnElementChanged(object sender, VisualElementChangedEventArgs e)
 		{
-			Performance.Start(out string reference);
+			//Performance.Start(out string reference);
 			if (e.OldElement != null)
 			{
 				e.OldElement.PropertyChanged -= OnElementPropertyChanged;
@@ -100,7 +100,7 @@ namespace Xamarin.Forms.Platform.Android.FastRenderers
 			}
 
 			EffectUtilities.RegisterEffectControlProvider(this, e.OldElement, e.NewElement);
-			Performance.Stop(reference);
+			//Performance.Stop(reference);
 		}
 
 		void UpdateIsEnabled()
