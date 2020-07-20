@@ -9,9 +9,9 @@ using Xamarin.Forms.Internals;
 namespace Xamarin.Forms.Controls
 {
 	[Preserve(AllMembers = true)]
-	internal class PerformanceProvider : IPerformanceProvider
+	public class PerformanceProvider : IPerformanceProvider
 	{
-		internal class Statistic
+		public class Statistic
 		{
 			public readonly List<Tuple<string, long>> StartTimes = new List<Tuple<string, long>>();
 			public int CallCount;
@@ -61,7 +61,7 @@ namespace Xamarin.Forms.Controls
 		public void DumpStats()
 		{
 			var b = new StringBuilder();
-			b.AppendLine("ID                                                                                 | Call Count | Total Time | Avg Time");
+			b.AppendLine("ID                                                                          | Call Count | Total Time | Avg Time");
 			foreach (KeyValuePair<string, Statistic> kvp in Statistics.OrderBy(kvp => kvp.Key))
 			{
 				string key = ShortenPath(kvp.Key);

@@ -47,6 +47,8 @@ namespace Xamarin.Forms.ControlGallery.Android
 #else
 			Forms.SetFlags("UseLegacyRenderers", "SwipeView_Experimental", "MediaElement_Experimental", "AppTheme_Experimental");
 #endif
+
+			Xamarin.Forms.Forms.SetFlags("Profile");
 			Forms.Init(this, bundle);
 
 			FormsMaps.Init(this, bundle);

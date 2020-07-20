@@ -33,10 +33,10 @@ namespace Xamarin.Forms.Controls
 		{
 			_testCloudService = DependencyService.Get<ITestCloudService>();
 
-			SetMainPage(CreateDefaultMainPage());
+			//SetMainPage(CreateDefaultMainPage());
+			MainPage = new PerfPage1();
 
 			//TestMainPageSwitches();
-
 			//SetMainPage(new ImageSourcesGallery());
 		}
 
