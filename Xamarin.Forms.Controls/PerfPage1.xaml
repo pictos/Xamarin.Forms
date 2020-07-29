@@ -11,5 +11,11 @@
             <Label x:Name="lbl" />
             <Label Text="Outro texto" />
         </StackLayout>
+
+        <!--  Grid layout  -->
+        <!--<Grid RowDefinitions="*,*">
+            <Label x:Name="lbl" />
+            <Label Grid.Row="1" Text="Outro texto" />
+        </Grid>-->
     </ContentPage.Content>
 </ContentPage>
