@@ -24,20 +24,21 @@ namespace Xamarin.Forms.Platform.Android
 			if (appearance == null)
 			{
 				UpdateScrim(Brush.Transparent);
-				_flyoutWidth = _flyoutWidthDefault;
+				//_flyoutWidth = _flyoutWidthDefault; //TODO: See why ShellAppearance always is null
+				SetFlyoutWidhtSize();
 				_flyoutHeight = LP.MatchParent;
 			}
 			else
 			{
 				UpdateScrim(appearance.FlyoutBackdrop);
 
-				if (appearance.FlyoutHeight != -1)
-					_flyoutHeight = Context.ToPixels(appearance.FlyoutHeight);
+				if (appearance.FlyoutHeight.Value != -1 && appearance.FlyoutHeight.GridUnitType == GridUnitType.Absolute)
+					_flyoutHeight = Context.ToPixels(appearance.FlyoutHeight.Value);
 				else
 					_flyoutHeight = LP.MatchParent;
 
-				if (appearance.FlyoutWidth != -1)
-					_flyoutWidth = Context.ToPixels(appearance.FlyoutWidth);
+				if (appearance.FlyoutWidth.Value != -1)
+					SetFlyoutWidhtSize();
 				else
 					_flyoutWidth = -1;
 			}
@@ -47,6 +48,16 @@ namespace Xamarin.Forms.Platform.Android
 				UpdateFlyoutSize();
 				if (_content != null)
 					UpdateDrawerLockMode(_behavior);
+			}
+
+
+			void SetFlyoutWidhtSize()
+			{
+				var value = appearance?.FlyoutWidth ?? Shell.GetFlyoutWidth(Shell);
+				if (value.GridUnitType == GridUnitType.Star)
+					_flyoutWidth = Resources.DisplayMetrics.WidthPixels * value.Value;
+				else
+					_flyoutWidth = Context.ToPixels(value.Value);
 			}
 		}
 		#endregion IAppearanceObserver
@@ -134,7 +145,7 @@ namespace Xamarin.Forms.Platform.Android
 		{
 			get
 			{
-				if(_flyoutWidth == -1)
+				if(_flyoutWidth == -1 || _flyoutWidth == 0)
 				{
 					return _flyoutWidthDefault;
 				}

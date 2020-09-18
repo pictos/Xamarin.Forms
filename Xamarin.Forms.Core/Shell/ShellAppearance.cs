@@ -34,7 +34,7 @@ namespace Xamarin.Forms
 
 		Color?[] _colorArray = new Color?[s_ingestArray.Length];
 		Brush[] _brushArray = new Brush[s_ingestBrushArray.Length];
-		double[] _doubleArray = new double[s_ingestDoubleArray.Length];
+		GridLength[] _doubleArray = new GridLength[s_ingestDoubleArray.Length];
 
 		public Color BackgroundColor => _colorArray[0].Value;
 
@@ -57,8 +57,8 @@ namespace Xamarin.Forms
 		public Color UnselectedColor => _colorArray[9].Value;
 
 		public Brush FlyoutBackdrop => _brushArray[0];
-		public double FlyoutWidth => _doubleArray[0];
-		public double FlyoutHeight => _doubleArray[1];
+		public GridLength FlyoutWidth => _doubleArray[0];
+		public GridLength FlyoutHeight => _doubleArray[1];
 
 		Color IShellAppearanceElement.EffectiveTabBarBackgroundColor =>
 			!TabBarBackgroundColor.IsDefault ? TabBarBackgroundColor : BackgroundColor;
@@ -81,15 +81,15 @@ namespace Xamarin.Forms
 				_brushArray[i] = Brush.Default;
 
 			for (int i = 0; i < _doubleArray.Length; i++)
-				_doubleArray[i] = -1;			
+				_doubleArray[i] = new GridLength(.2, GridUnitType.Star);
 		}
 
 		public override bool Equals(object obj)
 		{
-			if(!(obj is ShellAppearance appearance))
+			if (!(obj is ShellAppearance appearance))
 				return false;
 
-			for(int i = 0; i < _colorArray.Length; i++)
+			for (int i = 0; i < _colorArray.Length; i++)
 			{
 				if (!EqualityComparer<Color>.Default.Equals(_colorArray[i].Value, appearance._colorArray[i].Value))
 					return false;
@@ -103,7 +103,7 @@ namespace Xamarin.Forms
 
 			for (int i = 0; i < _doubleArray.Length; i++)
 			{
-				if (!EqualityComparer<double>.Default.Equals(_doubleArray[i], appearance._doubleArray[i]))
+				if (!EqualityComparer<GridLength>.Default.Equals(_doubleArray[i], appearance._doubleArray[i]))
 					return false;
 			}
 
@@ -120,7 +120,7 @@ namespace Xamarin.Forms
 				hashCode = hashCode * -1521134295 + EqualityComparer<Brush>.Default.GetHashCode(_brushArray[i]);
 
 			for (int i = 0; i < _doubleArray.Length; i++)
-				hashCode = hashCode * -1521134295 + EqualityComparer<double>.Default.GetHashCode(_doubleArray[i]);
+				hashCode = hashCode * -1521134295 + EqualityComparer<GridLength>.Default.GetHashCode(_doubleArray[i]);
 
 			return hashCode;
 		}
@@ -149,10 +149,10 @@ namespace Xamarin.Forms
 				}
 			}
 
-			var doubleDataSet = pivot.GetValues<double>(s_ingestDoubleArray);
+			var doubleDataSet = pivot.GetValues<GridLength>(s_ingestDoubleArray);
 			for (int i = 0; i < s_ingestDoubleArray.Length; i++)
 			{
-				if (_doubleArray[i] == -1 && doubleDataSet[i].IsSet)
+				if (_doubleArray[i].Value == -1 && doubleDataSet[i].IsSet)
 				{
 					anySet = true;
 					_doubleArray[i] = doubleDataSet[i].Value;

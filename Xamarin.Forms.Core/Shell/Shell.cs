@@ -82,8 +82,8 @@ namespace Xamarin.Forms
 		public static FlyoutBehavior GetFlyoutBehavior(BindableObject obj) => (FlyoutBehavior)obj.GetValue(FlyoutBehaviorProperty);
 		public static void SetFlyoutBehavior(BindableObject obj, FlyoutBehavior value) => obj.SetValue(FlyoutBehaviorProperty, value);
 
-		public static double GetFlyoutWidth(BindableObject obj) => (double)obj.GetValue(FlyoutWidthProperty);
-		public static void SetFlyoutWidth(BindableObject obj, double value) => obj.SetValue(FlyoutWidthProperty, value);
+		public static GridLength GetFlyoutWidth(BindableObject obj) => (GridLength)obj.GetValue(FlyoutWidthProperty);
+		public static void SetFlyoutWidth(BindableObject obj, GridLength value) => obj.SetValue(FlyoutWidthProperty, value);
 
 		public static double GetFlyoutHeight(BindableObject obj) => (double)obj.GetValue(FlyoutHeightProperty);
 		public static void SetFlyoutHeight(BindableObject obj, double value) => obj.SetValue(FlyoutHeightProperty, value);
@@ -161,7 +161,7 @@ namespace Xamarin.Forms
 				propertyChanged: OnShellAppearanceValueChanged);
 
 		public static readonly BindableProperty FlyoutWidthProperty =
-			BindableProperty.CreateAttached("FlyoutWidth", typeof(double), typeof(Shell), -1d,
+			BindableProperty.CreateAttached("FlyoutWidth", typeof(GridLength), typeof(Shell), new GridLength(.2, GridUnitType.Star),
 				propertyChanged: OnShellAppearanceValueChanged);
 
 		public static readonly BindableProperty FlyoutHeightProperty =
@@ -927,9 +927,9 @@ namespace Xamarin.Forms
 			set => SetValue(FlyoutBackdropProperty, value);
 		}
 
-		public double FlyoutWidth
+		public GridLength FlyoutWidth
 		{
-			get => (double)GetValue(FlyoutWidthProperty);
+			get => (GridLength)GetValue(FlyoutWidthProperty);
 			set => SetValue(FlyoutWidthProperty, value);
 		}
 

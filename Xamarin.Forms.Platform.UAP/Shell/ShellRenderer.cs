@@ -373,8 +373,8 @@ namespace Xamarin.Forms.Platform.UWP
 
 				_flyoutBackdrop = appearance.FlyoutBackdrop;
 
-				_flyoutWidth = appearance.FlyoutWidth;
-				_flyoutHeight = appearance.FlyoutHeight;
+				_flyoutWidth = appearance.FlyoutWidth.Value;
+				_flyoutHeight = appearance.FlyoutHeight.Value;
 			}
 
 			var titleBar = Windows.UI.ViewManagement.ApplicationView.GetForCurrentView().TitleBar;
