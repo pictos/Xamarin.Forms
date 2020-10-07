@@ -1,0 +1,28 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Shell
+    x:Class="Xamarin.Forms.Controls.MyShell"
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:local="clr-namespace:Xamarin.Forms.Controls.Issues"
+    xmlns:view="clr-namespace:Xamarin.Forms.Controls">
+    <FlyoutItem Title="0" Route="fly0">
+        <ShellContent Route="c0">
+            <view:Page1 />
+        </ShellContent>
+    </FlyoutItem>
+    <FlyoutItem Title="1" Route="fly1">
+        <ShellContent Route="c1">
+            <local:Issue1900 />
+        </ShellContent>
+    </FlyoutItem>
+    <FlyoutItem Title="2" Route="fly2">
+        <ShellContent Route="c2">
+            <local:Issue10024 />
+        </ShellContent>
+    </FlyoutItem>
+    <FlyoutItem Title="3" Route="fly3">
+        <ShellContent Route="c3">
+            <local:Issue1601 />
+        </ShellContent>
+    </FlyoutItem>
+</Shell>
