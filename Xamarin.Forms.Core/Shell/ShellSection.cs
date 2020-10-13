@@ -76,7 +76,7 @@ namespace Xamarin.Forms
 			callback(DisplayedPage);
 		}
 
-		internal Task GoToPart(NavigationRequest request, Dictionary<string, string> queryData)
+		internal Task GoToPart(NavigationRequest request, ShellParameter queryData)
 		{
 			ShellContent shellContent = request.Request.Content;
 
@@ -332,7 +332,7 @@ namespace Xamarin.Forms
 			return (ShellSection)(ShellContent)page;
 		}
 
-		async Task PrepareCurrentStackForBeingReplaced(NavigationRequest request, IDictionary<string, string> queryData, bool? animate, List<string> globalRoutes)
+		async Task PrepareCurrentStackForBeingReplaced(NavigationRequest request, ShellParameter queryData, bool? animate, List<string> globalRoutes)
 		{
 			string route = "";
 			List<Page> navStack = null;
@@ -507,7 +507,7 @@ namespace Xamarin.Forms
 			return startingList;
 		}
 
-		Page GetOrCreateFromRoute(string route, IDictionary<string, string> queryData, bool isLast)
+		Page GetOrCreateFromRoute(string route, ShellParameter queryData, bool isLast)
 		{
 			var content = Routing.GetOrCreateContent(route) as Page;
 			if (content == null)
@@ -519,7 +519,7 @@ namespace Xamarin.Forms
 			return content;
 		}
 
-		internal async Task GoToAsync(NavigationRequest request, IDictionary<string, string> queryData, bool? animate)
+		internal async Task GoToAsync(NavigationRequest request, ShellParameter queryData, bool? animate)
 		{
 			List<string> globalRoutes = request.Request.GlobalRoutes;
 			string route = String.Empty;

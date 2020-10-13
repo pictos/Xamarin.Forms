@@ -61,7 +61,7 @@ namespace Xamarin.Forms
 
 		IShellItemController ShellItemController => this;
 
-		internal Task GoToPart(NavigationRequest request, Dictionary<string, string> queryData)
+		internal Task GoToPart(NavigationRequest request, ShellParameter queryData)
 		{
 			var shellSection = request.Request.Section;
 

@@ -484,24 +484,25 @@ namespace Xamarin.Forms
 			return GoToAsync(deferredArgs.Target, deferredArgs.Animate, false, deferredArgs);
 		}
 
-		public Task GoToAsync(ShellNavigationState state)
+		public Task GoToAsync(ShellNavigationState state, ShellParameter parameters = null)
 		{
-			return GoToAsync(state, null, false);
+			return GoToAsync(state, null, false, parameters: parameters);
 		}
 
-		public Task GoToAsync(ShellNavigationState state, bool animate)
+		public Task GoToAsync(ShellNavigationState state, bool animate, ShellParameter parameters = null)
 		{
-			return GoToAsync(state, animate, false);
+			return GoToAsync(state, animate, false, parameters: parameters);
 		}
 
-		internal Task GoToAsync(ShellNavigationState state, bool? animate, bool enableRelativeShellRoutes, ShellNavigatingEventArgs deferredArgs = null)
+		internal Task GoToAsync(ShellNavigationState state, bool? animate, bool enableRelativeShellRoutes, ShellNavigatingEventArgs deferredArgs = null, ShellParameter parameters = null)
 		{
 			return GoToAsync(new ShellNavigationParameters
 			{
 				TargetState = state,
 				Animated = animate,
 				EnableRelativeShellRoutes = enableRelativeShellRoutes,
-				DeferredArgs = deferredArgs
+				DeferredArgs = deferredArgs,
+				Parameters = parameters
 			});
 		}
 
@@ -514,6 +515,7 @@ namespace Xamarin.Forms
 			bool? animate = shellNavigationParameters.Animated;
 			bool enableRelativeShellRoutes = shellNavigationParameters.EnableRelativeShellRoutes;
 			ShellNavigatingEventArgs deferredArgs = shellNavigationParameters.DeferredArgs;
+			var parameters = shellNavigationParameters.Parameters ?? new ShellParameter();
 
 			if (_deferredEventArgs != null && _deferredEventArgs != deferredArgs)
 			{
@@ -543,8 +545,9 @@ namespace Xamarin.Forms
 			var uri = navigationRequest.Request.FullUri;
 			var queryString = navigationRequest.Query;
 			var queryData = ParseQueryString(queryString);
+			parameters.Merge(queryData);
 
-			ApplyQueryAttributes(this, queryData, false);
+			ApplyQueryAttributes(this, parameters, false);
 
 			var shellItem = navigationRequest.Request.Item;
 			var shellSection = navigationRequest.Request.Section;
@@ -563,17 +566,17 @@ namespace Xamarin.Forms
 				modalStackPreBuilt = true;
 
 				bool? isAnimated = (nextActiveSection != currentShellSection) ? false : animate;
-				await nextActiveSection.GoToAsync(navigationRequest, queryData, isAnimated);
+				await nextActiveSection.GoToAsync(navigationRequest, parameters, isAnimated);
 			}
 
 			if (shellItem != null)
 			{
-				ApplyQueryAttributes(shellItem, queryData, navigationRequest.Request.Section == null);
+				ApplyQueryAttributes(shellItem, parameters, navigationRequest.Request.Section == null);
 				bool navigatedToNewShellElement = false;
 
 				if (shellSection != null && shellContent != null)
 				{
-					Shell.ApplyQueryAttributes(shellContent, queryData, navigationRequest.Request.GlobalRoutes.Count == 0);
+					Shell.ApplyQueryAttributes(shellContent, parameters, navigationRequest.Request.GlobalRoutes.Count == 0);
 					if (shellSection.CurrentItem != shellContent)
 					{
 						shellSection.SetValueFromRenderer(ShellSection.CurrentItemProperty, shellContent);
@@ -583,7 +586,7 @@ namespace Xamarin.Forms
 
 				if (shellSection != null)
 				{
-					Shell.ApplyQueryAttributes(shellSection, queryData, navigationRequest.Request.Content == null);
+					Shell.ApplyQueryAttributes(shellSection, parameters, navigationRequest.Request.Content == null);
 					if (shellItem.CurrentItem != shellSection)
 					{
 						shellItem.SetValueFromRenderer(ShellItem.CurrentItemProperty, shellSection);
@@ -620,7 +623,7 @@ namespace Xamarin.Forms
 					// TODO get rid of this hack and fix so if there's a stack the current page doesn't display
 					await Device.InvokeOnMainThreadAsync(() =>
 					{
-						return CurrentItem.CurrentItem.GoToAsync(navigationRequest, queryData, animate);
+						return CurrentItem.CurrentItem.GoToAsync(navigationRequest, parameters, animate);
 					});
 				}
 				else if (navigationRequest.Request.GlobalRoutes.Count == 0 &&
@@ -630,13 +633,13 @@ namespace Xamarin.Forms
 					// TODO get rid of this hack and fix so if there's a stack the current page doesn't display
 					await Device.InvokeOnMainThreadAsync(() =>
 					{
-						return CurrentItem.CurrentItem.GoToAsync(navigationRequest, queryData, animate);
+						return CurrentItem.CurrentItem.GoToAsync(navigationRequest, parameters, animate);
 					});
 				}
 			}
 			else
 			{
-				await CurrentItem.CurrentItem.GoToAsync(navigationRequest, queryData, animate);
+				await CurrentItem.CurrentItem.GoToAsync(navigationRequest, parameters, animate);
 			}
 
 			_accumulateNavigatedEvents = false;
@@ -646,7 +649,7 @@ namespace Xamarin.Forms
 				HandleNavigated(_accumulatedEvent);
 		}
 
-		internal static void ApplyQueryAttributes(Element element, IDictionary<string, string> query, bool isLastItem)
+		internal static void ApplyQueryAttributes(Element element, ShellParameter query, bool isLastItem)
 		{
 			string prefix = "";
 			if (!isLastItem)
@@ -672,7 +675,7 @@ namespace Xamarin.Forms
 				baseShellItem = element?.Parent as BaseShellItem;
 
 			//filter the query to only apply the keys with matching prefix
-			var filteredQuery = new Dictionary<string, string>(query.Count);
+			var filteredQuery = new ShellParameter(query.Count);
 			foreach (var q in query)
 			{
 				if (!q.Key.StartsWith(prefix, StringComparison.Ordinal))
