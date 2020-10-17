@@ -250,7 +250,7 @@ namespace Xamarin.Forms.Core.UnitTests
 			Routing.RegisterRoute("details", typeof(ShellTestPage));
 			shell.Items.Add(item);
 			var obj = new object();
-			var parameter = new ShellParameter
+			var parameter = new ShellRouteParameter
 			{
 				{"DoubleQueryParameter", 2d },
 				{ "ComplexObject", obj}
@@ -284,7 +284,7 @@ namespace Xamarin.Forms.Core.UnitTests
 			});
 
 			var obj = new object();
-			var parameter = new ShellParameter
+			var parameter = new ShellRouteParameter
 			{
 				{"DoubleQueryParameter", 2d },
 				{ "ComplexObject", obj}
@@ -308,7 +308,7 @@ namespace Xamarin.Forms.Core.UnitTests
 			shell.Items.Add(item);
 			string urlTest = @"https://www.somewebsite.com/id/545/800/600.jpg";
 
-			var parameter = new ShellParameter
+			var parameter = new ShellRouteParameter
 			{
 				{ nameof(ShellTestPage.SomeQueryParameter) ,urlTest }
 			};
